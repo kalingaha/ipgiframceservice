@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://www.mobitel.lk/schemas/utilValidator" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://www.mobitel.lk/schemas/utilValidator" targetNamespace="http://www.mobitel.lk/schemas/utilValidator">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mobitel.lk/schemas/utilValidator" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.mobitel.lk/schemas/utilValidator">
+			<xsd:element name="validateUtilityRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+                                                <xsd:element maxOccurs="1" minOccurs="0" name="utilityAmount" type="xsd:double"/>
+						<xsd:element name="utilityCode">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:pattern value="[A-Z]{4}\d{6}"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+						<xsd:element name="utilityAccountNumber" type="xsd:string"/>
+						<xsd:element minOccurs="0" name="utilityMode">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:enumeration value="REGISTER"/>
+									<xsd:enumeration value="PAYMENT"/>
+                                                                        <xsd:enumeration value="BANKDEPOSIT"/>
+                                                                        <xsd:enumeration value="BANKWITHDRAWAL"/>                                                                        
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+                                                <xsd:element name="mobileNumber" type="xsd:string"/>                                                
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="validateUtilityResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="utilityValid" type="xsd:boolean"/>
+						<xsd:element minOccurs="0" name="utilityResponse">
+							<xsd:simpleType>
+								<xsd:restriction base="xsd:string">
+									<xsd:enumeration value="ERROR"/>
+									<xsd:enumeration value="PRE"/>
+									<xsd:enumeration value="POS"/>
+                                                                        <xsd:enumeration value="1052"/>
+                                                                        <xsd:enumeration value="INVALIDUTILCODE"/>
+								</xsd:restriction>
+							</xsd:simpleType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="validateUtilityRequest">
+		<wsdl:part element="tns:validateUtilityRequest" name="validateUtilityRequest"/>
+	</wsdl:message>
+	<wsdl:message name="validateUtilityResponse">
+		<wsdl:part element="tns:validateUtilityResponse" name="validateUtilityResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="utilValidationService">
+		<wsdl:operation name="validateUtility">
+			<wsdl:input message="tns:validateUtilityRequest" name="validateUtilityRequest"/>
+			<wsdl:output message="tns:validateUtilityResponse" name="validateUtilityResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="utilValidationServiceSoap11" type="tns:utilValidationService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="validateUtility">
+			<soap:operation soapAction=""/>
+			<wsdl:input name="validateUtilityRequest">
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="validateUtilityResponse">
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="utilValidationServiceService">
+		<wsdl:port binding="tns:utilValidationServiceSoap11" name="utilValidationServiceSoap11">
+			<soap:address location="http://192.168.43.70:8080/utilvalidatorws/utilValidationService.wsdl"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
